@@ -1,7 +1,7 @@
 import runWorld as rw
 import drawWorld as dw
 import pygame as pg
-
+from random import randint
 ################################################################
 
 # This program is an interactive simulation/game. A cat starts
@@ -15,7 +15,7 @@ import pygame as pg
 #
 # For example, the tuple (7,1) would represent the cat at x-coord,
 # 7, and moving to the right by 1 pixel per "clock tick."
-# 
+#
 # The initial state of the cat in this program is (0,1), meaning that the cat
 # starts at the left of the screen and moves right one pixel per tick.
 #
@@ -46,7 +46,7 @@ myimage = dw.loadImage("cat.bmp")
 #
 def updateDisplay(state):
     dw.fill(dw.black)
-    dw.draw(myimage, (state[0], height/2))
+    dw.draw(myimage, [state[0], state[2]])
 
 
 ################################################################
@@ -58,7 +58,7 @@ def updateDisplay(state):
 #
 # state -> state
 def updateState(state):
-    return((state[0]+state[1],state[1]))
+    return([state[0] + state[1],state[1],state[2] + state[3],state[3]])
 
 ################################################################
 
@@ -85,23 +85,28 @@ def endState(state):
 #
 # state -> event -> state
 #
-def handleEvent(state, event):  
+def handleEvent(state, event):
 #    print("Handling event: " + str(event))
     if (event.type == pg.MOUSEBUTTONDOWN):
+        #state[2] = randint(1,5)
+        #state[3] = randint(1,5)
         if (state[1]) == 1:
-            newState = -1
+            state[1] = -1
         else:
-            newState = 1   
-        return((state[0],newState))
-    else:
-        return(state)
+            state[1] = 1
+
+        if (state[3]) == 1:
+            state[3] == -1
+        return([state[0],state[1],state[2],state[3]])
+    #else:
+    return(state)
 
 ################################################################
 
 # World state will be single x coordinate at left edge of world
 
-# The cat starts at the left, moving right 
-initState = (0,1)
+# The cat starts at the left, moving right
+initState = [0,1, height/2,1]
 
 # Run the simulation no faster than 60 frames per second
 frameRate = 60
